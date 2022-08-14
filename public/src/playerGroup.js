@@ -1,17 +1,15 @@
 import { Player } from "./player.js";
 
 export class PlayerGroup {
-    constructor(stageWidth, stageHeight, socket) {
-        this.stageWidth = stageWidth;
-        this.stageHeight = stageHeight;
+    constructor(socket) {
         this.players = {};
         this.socket = socket;
-
+        
         this.socket.on('userJoin', (data) => {
-            const newPlayer = new Player(this.stageWidth, this.stageHeight, 
-                                         data.xRatio, data.yRatio, data.id, data.color);
+            const newPlayer = new Player(data.id, data.color);
             this.addPlayer(newPlayer);
-            console.log(newPlayer);
+            if (this.stageWidth !== undefined && this.stageHeight !== undefined) 
+                this.resize(this.stageWidth, this.stageHeight);
         });
 
         this.socket.on('update', (data) => {
@@ -23,6 +21,16 @@ export class PlayerGroup {
         this.socket.on('leaveUser', (id) => {
             delete this.players[id];
         });
+    }
+
+    resize(stageWidth, stageHeight) {
+        this.stageWidth = stageWidth;
+        this.stageHeight = stageHeight;
+
+        for (const player in this.players) {
+            const playerObjcet = this.players[player];
+            playerObjcet.resize(this.stageWidth, this.stageHeight);
+        }
     }
 
     addPlayer(player) {
@@ -50,7 +58,7 @@ export class PlayerGroup {
                     playerObject.getY(), 
                     playerObject.radius, 0, 2 * Math.PI);
             ctx.textAlign = 'center';
-            ctx.fillText(playerObject.name, playerObject.getX(), playerObject.getY() - 15);
+            ctx.fillText(playerObject.name, playerObject.getX(), playerObject.getY() - playerObject.radius - 5);
             ctx.fill();
             ctx.closePath();
         }

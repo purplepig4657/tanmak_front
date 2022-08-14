@@ -2,6 +2,7 @@
     margin: 0;
     padding: 0;
     outline: 0;
+    border: 0;
 }
 
 html {
@@ -12,10 +13,29 @@ html {
 body {
     width: 100%;
     height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
 }
 
 canvas {
-    width: 500px;
-    height: 500px;
-    border: 1px solid black;
+    width: 100%;
+    height: 100%;
+    max-width: 800px;
+    max-height: 800px;
+}
+
+@media (min-width: 800px) {
+    canvas {
+        border-right: 1px solid black;
+        border-left: 1px solid black;
+    }
+}
+
+@media (min-height: 800px) {
+    canvas {
+        border-top: 1px solid black;
+        border-bottom: 1px solid black;
+    }
 }

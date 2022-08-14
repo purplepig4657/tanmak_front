@@ -41,8 +41,8 @@ io.on('connection', (socket) => {
 
     const id = socket.id;
     const color = '#' + Math.floor(Math.random() * 16777215).toString(16);
-    const initialPosition = 0.5;
-    const user = new Player(id, color, initialPosition, initialPosition);
+    const initialPositionRatio = 0.5;
+    const user = new Player(id, color, initialPositionRatio, initialPositionRatio);
 
     socket.emit('initInfo', user);
     players[id] = user;
