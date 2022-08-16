@@ -14,8 +14,8 @@ export class PlayerGroup {
 
         this.socket.on('update', (data) => {
             let player = this.players[data.id];
-            player.setX(data.xRatio);
-            player.setY(data.yRatio);
+            player.setXByRatio(data.xRatio);
+            player.setYByRatio(data.yRatio);
         });
 
         this.socket.on('leaveUser', (id) => {
@@ -31,10 +31,6 @@ export class PlayerGroup {
             const playerObjcet = this.players[player];
             playerObjcet.resize(this.stageWidth, this.stageHeight);
         }
-    }
-
-    addPlayer(player) {
-        this.players[player.id] = player;
     }
 
     update(ctx) {
@@ -62,6 +58,10 @@ export class PlayerGroup {
             ctx.fill();
             ctx.closePath();
         }
+    }
+
+    addPlayer(player) {
+        this.players[player.id] = player;
     }
 
 }

@@ -19,6 +19,7 @@ server.listen(8000, () => {
     console.log("server run!");
 });
 
+// Socket Server test code. Not Backend code.
 class Player {
     constructor(id, color, xRatio = 0.5, yRatio = 0.5) {
         this.id = id;
@@ -30,7 +31,6 @@ class Player {
 
 let players = {};
 
-// Socket Server test code. Not Backend code.
 io.on('connection', (socket) => {
     socket.on('disconnect', (reason) => {
         delete players[socket.id];

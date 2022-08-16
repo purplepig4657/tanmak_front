@@ -1,5 +1,7 @@
 import { Player } from "./player.js";
 import { PlayerGroup } from "./playerGroup.js";
+import { MeatBallGroup } from "./meatBallGroup.js";
+import { MeatBall } from "./meatBall.js";
 
 class App {
     constructor() {
@@ -7,8 +9,10 @@ class App {
         this.ctx = this.canvas.getContext('2d');
         document.body.appendChild(this.canvas);
 
-        this.socket = io("http://localhost:8000");
+        this.socket = io("http://172.30.1.35:8080");
+        console.log(this.socket);
         this.playerGroup = new PlayerGroup(this.socket);
+        this.meatBallGroup = new MeatBallGroup(this.socket);
         this.socket.on('initInfo', function (data) {
             this.myPlayer = new Player(data.id, data.color, true, document);
             this.playerGroup.addPlayer(this.myPlayer);
@@ -17,6 +21,11 @@ class App {
         }.bind(this));
 
         requestAnimationFrame(this.update.bind(this));
+
+        /*setInterval(() => {
+            this.meatBallGroup.addMeatBall(new MeatBall(1 / 800, 0.5, 0.5, 0, 0.5));
+            console.log(this.meatBallGroup.meatBalls);
+        }, 1000);*/
     }
 
     resize() {
@@ -26,6 +35,7 @@ class App {
         const dpr = window.devicePixelRatio;
 
         this.playerGroup.resize(this.stageWidth, this.stageHeight);
+        this.meatBallGroup.resize(this.stageWidth, this.stageHeight);
         
         this.canvas.width = this.stageWidth * dpr;
         this.canvas.height = this.stageHeight * dpr;
@@ -36,6 +46,7 @@ class App {
         this.ctx.clearRect(0, 0, this.stageWidth, this.stageHeight);
 
         this.playerGroup.update(this.ctx);
+        this.meatBallGroup.update(this.ctx);
 
         requestAnimationFrame(this.update.bind(this));
     }

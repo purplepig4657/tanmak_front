@@ -21,8 +21,8 @@ export class Player {
         this.playerXSpeed = this.stageWidth * speedConstant;
         this.playerYSpeed = this.stageHeight * speedConstant;
         this.radius = this.stageWidth * this.stageHeight * radiusConstant;
-        this.setX(xRatio);
-        this.setY(yRatio);
+        this.setXByRatio(xRatio);
+        this.setYByRatio(yRatio);
     }
 
     resize(stageWidth, stageHeight) {
@@ -35,18 +35,27 @@ export class Player {
         this.init(previousXRatio, previousYRatio);
     }
 
+    update() {
+        if (this.isMy) {
+            if (this.rightPressed && this.x < this.stageWidth - this.radius) this.x += this.playerXSpeed;
+            if (this.leftPressed && this.x > this.radius) this.x -= this.playerXSpeed;
+            if (this.upPressed && this.y > this.radius) this.y -= this.playerYSpeed;
+            if (this.downPressed && this.y < this.stageHeight - this.radius) this.y += this.playerYSpeed;
+        }
+    }
+
     keyDownHandler(event) {
         if (event.code == 'ArrowRight') this.rightPressed = true;
         if (event.code == 'ArrowLeft') this.leftPressed = true;
-        if(event.code == "ArrowDown") this.downPressed = true;
-        if(event.code == "ArrowUp") this.upPressed = true;
+        if (event.code == "ArrowDown") this.downPressed = true;
+        if (event.code == "ArrowUp") this.upPressed = true;
     }
     
     keyUpHandler(event) {
         if (event.code == 'ArrowRight') this.rightPressed = false;
         if (event.code == 'ArrowLeft') this.leftPressed = false;
-        if(event.code == "ArrowDown") this.downPressed = false;
-        if(event.code == "ArrowUp") this.upPressed = false;
+        if (event.code == "ArrowDown") this.downPressed = false;
+        if (event.code == "ArrowUp") this.upPressed = false;
     }
 
     getX() {
@@ -62,26 +71,17 @@ export class Player {
         return this.x / this.stageWidth;
     }
 
-    setX(xRatio) {
-        this.x = this.stageWidth * xRatio;
-    }
-
     getYRatio() {
         if (this.y === undefined) return 0.5;
         return this.y / this.stageHeight;
     }
 
-    setY(yRatio) {
-        this.y = this.stageHeight * yRatio;
+    setXByRatio(xRatio) {
+        this.x = this.stageWidth * xRatio;
     }
 
-    update() {
-        if (this.isMy) {
-            if (this.rightPressed && this.x < this.stageWidth - this.radius) this.x += this.playerXSpeed;
-            if (this.leftPressed && this.x > this.radius) this.x -= this.playerXSpeed;
-            if (this.upPressed && this.y > this.radius) this.y -= this.playerYSpeed;
-            if (this.downPressed && this.y < this.stageHeight - this.radius) this.y += this.playerYSpeed;
-        }
+    setYByRatio(yRatio) {
+        this.y = this.stageHeight * yRatio;
     }
 
 }
