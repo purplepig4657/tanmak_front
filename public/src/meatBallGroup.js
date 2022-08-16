@@ -45,6 +45,11 @@ export class MeatBallGroup {
         }
     }
 
+    getMeatBalls() {
+        if (this.meatBalls !== undefined) return this.meatBalls;
+        else throw "ObjectUndefinedError";
+    }
+
     addMeatBall(meatBall) {
         this.meatBalls.push(meatBall);
         meatBall.resize(this.stageWidth, this.stageHeight);

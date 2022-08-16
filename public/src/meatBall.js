@@ -56,4 +56,9 @@ export class MeatBall {
     setYByRatio(yRatio) {
         this.y = this.stageHeight * yRatio;
     }
+    
+    getRadius() {
+        return this.radius;
+    }
+
 }

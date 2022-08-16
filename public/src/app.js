@@ -1,6 +1,5 @@
 import { Player } from "./player.js";
-import { PlayerGroup } from "./playerGroup.js";
-import { MeatBallGroup } from "./meatBallGroup.js";
+import { EntityController } from "./EntityController.js";
 import { MeatBall } from "./meatBall.js";
 
 class App {
@@ -9,23 +8,30 @@ class App {
         this.ctx = this.canvas.getContext('2d');
         document.body.appendChild(this.canvas);
 
-        this.socket = io("http://172.30.1.35:8080");
+        this.socket = io("http://localhost:8000");
         console.log(this.socket);
-        this.playerGroup = new PlayerGroup(this.socket);
-        this.meatBallGroup = new MeatBallGroup(this.socket);
+        this.entityController = new EntityController(this.socket);
+        this.playerGroup = this.entityController.getPlayerGroup();
+        this.meatBallGroup = this.entityController.getMeatBallGroup();
         this.socket.on('initInfo', function (data) {
             this.myPlayer = new Player(data.id, data.color, true, document);
+            this.playerGroup.setMyPlayer(this.myPlayer);
             this.playerGroup.addPlayer(this.myPlayer);
             window.addEventListener('resize', this.resize.bind(this), false);
             this.resize('resize');
+            requestAnimationFrame(this.update.bind(this));
         }.bind(this));
 
-        requestAnimationFrame(this.update.bind(this));
+        this.socket.on('connect_error', function (err) {
+            alert(`a connection error occured due to ${err}`);
+            this.socket.close();
+        }.bind(this));
 
-        /*setInterval(() => {
+        /* local test
+        setInterval(() => {
             this.meatBallGroup.addMeatBall(new MeatBall(1 / 800, 0.5, 0.5, 0, 0.5));
-            console.log(this.meatBallGroup.meatBalls);
-        }, 1000);*/
+        }, 1000);
+        */
     }
 
     resize() {
@@ -34,8 +40,7 @@ class App {
 
         const dpr = window.devicePixelRatio;
 
-        this.playerGroup.resize(this.stageWidth, this.stageHeight);
-        this.meatBallGroup.resize(this.stageWidth, this.stageHeight);
+        this.entityController.resize(this.stageWidth, this.stageHeight);
         
         this.canvas.width = this.stageWidth * dpr;
         this.canvas.height = this.stageHeight * dpr;
@@ -45,8 +50,7 @@ class App {
     update() {
         this.ctx.clearRect(0, 0, this.stageWidth, this.stageHeight);
 
-        this.playerGroup.update(this.ctx);
-        this.meatBallGroup.update(this.ctx);
+        this.entityController.update(this.ctx);
 
         requestAnimationFrame(this.update.bind(this));
     }

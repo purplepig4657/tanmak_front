@@ -84,4 +84,20 @@ export class Player {
         this.y = this.stageHeight * yRatio;
     }
 
+    getRadius() {
+        return this.radius;
+    }
+
+    getDead() {
+        return this.dead;
+    }
+
+    setDead(boolean) {
+        this.dead = boolean;
+    }
+
+    getId() {
+        return this.id;
+    }
+
 }

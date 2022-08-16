@@ -21,6 +21,11 @@ export class PlayerGroup {
         this.socket.on('leaveUser', (id) => {
             delete this.players[id];
         });
+
+        this.socket.on('dead', (id) => {
+            const targetPlayer = this.getPlayer(id);
+            targetPlayer.setDead(true);
+        });
     }
 
     resize(stageWidth, stageHeight) {
@@ -36,6 +41,10 @@ export class PlayerGroup {
     update(ctx) {
         for (const player in this.players) {
             const playerObject = this.players[player];
+            if (playerObject.dead) {
+                delete this.players[player];
+                continue;
+            }
             if (playerObject.isMy) {
                 playerObject.update();
                 this.socket.emit('sendUserInfo', {
@@ -43,10 +52,6 @@ export class PlayerGroup {
                     xRatio: playerObject.getXRatio(),
                     yRatio: playerObject.getYRatio(),
                 });
-            }
-            if (playerObject.dead) {
-                delete this.players[player];
-                continue;
             }
             ctx.beginPath();
             ctx.fillStyle = playerObject.color;
@@ -58,6 +63,21 @@ export class PlayerGroup {
             ctx.fill();
             ctx.closePath();
         }
+    }
+
+    getMyPlayer() {
+        if (this.myPlayer !== undefined) return this.myPlayer;
+        else throw "ObjectUndefinedError";
+    }
+
+    getPlayer(playerId) {
+        const targetPlayer = this.players[playerId];
+        if (targetPlayer !== undefined) return targetPlayer;
+        else throw "ObjectUndefinedError";
+    }
+
+    setMyPlayer(player) {
+        this.myPlayer = player;
     }
 
     addPlayer(player) {
