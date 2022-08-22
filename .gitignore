@@ -1,2 +1,5 @@
 .DS_Store
+etc
+dist
 node_modules
+tanmak_backend

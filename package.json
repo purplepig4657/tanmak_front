@@ -1,17 +1,20 @@
 {
-  "name": "tanmak_front",
+  "name": "tanmak_frontend",
   "version": "1.0.0",
   "type": "module",
-  "description": "",
+  "description": "avoiding tanmak frontend",
   "main": "init.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc"
   },
-  "author": "",
+  "author": "purplepig4657",
   "license": "ISC",
   "dependencies": {
     "express": "^4.18.1",
-    "socket.io": "^4.5.1",
-    "socket.io-client": "^4.5.1"
+    "socket.io-client": "^4.5.1",
+    "typescript": "^4.7.4"
+  },
+  "devDependencies": {
+    "socket.io": "^4.5.1"
   }
 }
